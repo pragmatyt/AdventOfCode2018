@@ -5,7 +5,7 @@
 frequency() -> frequency(prepare_input(), 0).
 
 frequency([], Acc) -> Acc;
-frequency([H|T], Acc) -> frequency(T, H+Acc).
+frequency([H|T], Acc) -> frequency(T, Acc+H).
 
 prepare_input() -> 
 	String_list = string:split(input(), "\n", all),
@@ -977,5 +977,4 @@ input() ->
 +16
 +16
 +15
--119289
-".
+-119289".
