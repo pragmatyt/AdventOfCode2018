@@ -1,16 +1,47 @@
 -module(frequency).
--export([frequency/0]).
 -export([prepare_input/0]).
+-export([frequency/0]).
+-export([twice_repeated/0]).
 
+% PART 1
 frequency() -> frequency(prepare_input(), 0).
 
 frequency([], Acc) -> Acc;
 frequency([H|T], Acc) -> frequency(T, Acc+H).
 
+% PART 2
+
+%%%%% implementation with lists usage
+%twice_repeated() -> twice_repeated(prepare_input(), 0, []).
+
+%twice_repeated([],Acc ,Frequencies) -> twice_repeated(prepare_input(), Acc, Frequencies);
+%twice_repeated(Frequency_changes, Acc, Frequencies) -> is_duplicated(Frequency_changes, Acc, Frequencies).
+
+%is_duplicated([H|T], Acc, Frequencies) ->
+%		New_frequency = Acc + H,
+%		Is_repeated = lists:member(New_frequency, Frequencies),
+%		if Is_repeated == true -> New_frequency;
+%		true -> twice_repeated(T, New_frequency, [New_frequency|Frequencies])
+%		end.
+		
+%%%%% implementation with sets usage
+twice_repeated() -> twice_repeated(prepare_input(), 0, sets:new()).
+
+twice_repeated([],Acc ,Frequencies) -> twice_repeated(prepare_input(), Acc, Frequencies);
+twice_repeated(Frequency_changes, Acc, Frequencies) -> is_duplicated(Frequency_changes, Acc, Frequencies).
+
+is_duplicated([H|T], Acc, Frequencies) ->
+		New_frequency = Acc + H,
+		case sets:is_element(New_frequency, Frequencies) of 
+			true -> New_frequency;
+			false -> twice_repeated(T, New_frequency, sets:add_element(New_frequency, Frequencies)) 
+		end.
+
+
 prepare_input() -> 
-	String_list = string:split(input(), "\n", all),
+	Frequencies = string:split(input(), "\n", all),
 	lists:map(fun(X) -> {Int, _} = string:to_integer(X), Int end, 
-	String_list).
+	Frequencies).
 
 input() ->
 "-4
